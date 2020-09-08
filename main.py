@@ -10,7 +10,8 @@ if __name__ == '__main__':
     if len(errorList) > 0:  # if there are errors
         print("WARNING: The text file could not be created because of the following errors in your spreadsheet:\n")
         print("------------------------------------------------------------------------------------------------\n")
-        print(errorList)
+        for item in errorList:
+            print(item)
     #else:
     writerObj = TxtCreator(resultFile, koteretData, tenuotData)
     resultFile.write(writerObj.ReshumatKoteret_Creator())

@@ -6,9 +6,10 @@ class Validator:
     def __init__(self):
         self.errorList = []
 
-    def lessThanCharacterLimit_validate(self, data, position, character_limit):
+    def lessThanCharacterLimit_validate(self, data, position, character_limit, silent=False):
         if not len(str(data)) <= character_limit:
-            self.errorList += [f"Data entered in worksheet {position['worksheet']}, cell {position['col'] + position['row']} exceeds the character limit of {character_limit}.\n"]
+            if not silent:
+                self.errorList += [f"Data entered in worksheet {position['worksheet']}, cell {position['col'] + position['row']} exceeds the character limit of {character_limit}.\n"]
             return False
         return True
 
@@ -66,9 +67,10 @@ class Validator:
             return False
         return True
 
-    def exactLength_validate(self, data, length, position):
+    def exactLength_validate(self, data, length, position, silent=False):
         if len(str(data)) != length:
-            self.errorList += [f"Data in worksheet {position['worksheet']}, cell {position['col'] + position['row']} must be exactly {length} characters long.\n"]
+            if not silent:
+                self.errorList += [f"Data in worksheet {position['worksheet']}, cell {position['col'] + position['row']} must be exactly {length} characters long.\n"]
             return False
         return True
 

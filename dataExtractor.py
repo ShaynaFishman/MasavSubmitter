@@ -57,18 +57,18 @@ class DataPrepper:
         self.v.isProperDataType_validate(tenua["bank_code"], self.positions["bank_code"], int)
         self.v.exactLength_validate(tenua["bank_code"], 2, self.positions["bank_code"])
         self.v.isProperDataType_validate(tenua["branch_no"], self.positions["branch_no"], int)
-        if self.v.lessThanCharacterLimit_validate(tenua["branch_no"], self.positions["branch_no"], 3) and not self.v.exactLength_validate(tenua["branch_no"], 3, self.positions["branch_no"]):
+        if self.v.lessThanCharacterLimit_validate(tenua["branch_no"], self.positions["branch_no"], 3, silent=True) and not self.v.exactLength_validate(tenua["branch_no"], 3, self.positions["branch_no"], silent=True):
             tenua["branch_no"] = "0" * (3 - len(str(tenua["branch_no"]))) + str(tenua["branch_no"])
         self.v.isProperDataType_validate(tenua["bank_account_no"], self.positions["bank_account_no"], int)
         self.v.lessThanCharacterLimit_validate(tenua["bank_account_no"], self.positions["bank_account_no"], 9)
         self.v.isProperDataType_validate(tenua["payee_tz"], self.positions["payee_tz"], (int, type(None)))
         self.v.lessThanCharacterLimit_validate(tenua["payee_tz"], self.positions["payee_tz"], 9)
         self.v.isProperDataType_validate(tenua["payee_name"], self.positions["payee_name"], str)
-        if not self.v.lessThanCharacterLimit_validate(tenua["payee_name"],self.positions["payee_name"], 16):
+        if not self.v.lessThanCharacterLimit_validate(tenua["payee_name"],self.positions["payee_name"], 16, silent=True):
             tenua["payee_name"] = tenua["payee_name"][:16]
         self.v.isProperDataType_validate(tenua["amount"], self.positions["amount"], (int, float))
         self.v.sumOfMoneyFormat_validate(tenua["amount"], self.positions["amount"], 11, 2)
-        if not self.v.lessThanCharacterLimit_validate(tenua["payee_company_reference"], self.positions["payee_company_reference"], 20):
+        if not self.v.lessThanCharacterLimit_validate(tenua["payee_company_reference"], self.positions["payee_company_reference"], 20, silent=True):
             tenua["payee_company_reference"] = tenua["payee_company_reference"][:20]
         self.v.dateFormat_validate(tenua["payment_timeframe_begin"], self.positions["payment_timeframe_begin"], fullDate=False, blankAllowed=True)
         self.v.dateFormat_validate(tenua["payment_timeframe_end"], self.positions["payment_timeframe_end"], fullDate=False, blankAllowed=True)
