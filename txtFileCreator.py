@@ -1,12 +1,12 @@
-
+from decimal import *
 class TxtCreator:
 
     def __init__(self, input_spreadsheet, koteretData, tenuotData):
         self.resultFile = input_spreadsheet
         self.koteretData = koteretData
         self.tenuotData = tenuotData
-        self.tenuotCount = 0
-        self.tenuotTotal = 0
+        self.tenuotCount = 1
+        self.tenuotTotal = Decimal(0) #so we don't end up with floating point arithmetic problems
 
     def enterBlanks(self, amount: int, words =""):
         if words:
@@ -42,7 +42,6 @@ class TxtCreator:
         return result #or write to resultFile???
 
     def ReshumatTenua_Creator(self):
-        record_id = 1
         result = ""
         for record in self.tenuotData:
             result += '1' + self.enterZeros(8, self.koteretData['kod_mosad']) + \
@@ -53,11 +52,10 @@ class TxtCreator:
                       self.enterBlanks(4, record['payment_timeframe_begin']) + \
                       self.enterBlanks(4, record['payment_timeframe_end']) + self.enterZeros(3) + '006' +\
                       self.enterZeros(18) + self.enterBlanks(2) + '\n'
-            record_id += 1
-            self.tenuotTotal += self.toCents(record['amount']) #so we don't end up with floating point arithmetic problems
-        self.tenuotTotal /= 100  # divide by 100 to get back to dollar/cents format
-        print(self.tenuotTotal)
-        self.tenuotCount = record_id - 1
+            self.tenuotCount += 1
+            self.tenuotTotal += Decimal(record['amount'])
+        self.tenuotTotal = self.tenuotTotal.quantize(Decimal('.01')) #make the total currency format (2 decimal spaces)
+        self.tenuotCount -= 1 #fencepost issue fix
         return result
 
     def ReshumatTotal_Creator(self):
