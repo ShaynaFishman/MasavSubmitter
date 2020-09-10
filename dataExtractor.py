@@ -6,9 +6,13 @@ import datetime
 class DataPrepper:
 
     def __init__(self, input_spreadsheet):
-        self.wb = load_workbook(filename=input_spreadsheet)
-        self.koteret_sheet = self.wb["רשומות כותרות"]
-        self.tenuot_sheet = self.wb["רשומות תנועות"]
+        self.workbookIssue = False
+        try:
+            self.wb = load_workbook(filename=input_spreadsheet) 
+            self.koteret_sheet = self.wb["רשומות כותרות"]
+            self.tenuot_sheet = self.wb["רשומות תנועות"]
+        except:
+            self.workbookIssue = True
         self.koteretData = {}
         self.tenuotData = [] #list of dictionaries
         self.positions = {"mosad_sholeach": {"worksheet": "Kotarot", "col": "A", "row": "2"},
@@ -45,6 +49,9 @@ class DataPrepper:
         self.v.dateFormat_validate(self.koteretData["creation_date"], self.positions["creation_date"])
 
     def extractAndValidateKoteretData(self):
+        if self.workbookIssue:
+            self.v.errorList += "FATAL ERROR: improper Excel format or worksheet names.\nThe program only works with the template provided."
+            return {"ERROR", "Improper Excel format or worksheet names."}
         self.koteretData["mosad_sholeach"] = self.koteret_sheet['A2'].value
         self.koteretData["kod_mosad"] = self.koteret_sheet['B2'].value
         self.koteretData["shem_mosad"] = self.koteret_sheet['C2'].value
@@ -75,6 +82,9 @@ class DataPrepper:
 
 
     def extractAndValidateTenuotData(self):
+        if self.workbookIssue:
+            self.v.errorList += "FATAL ERROR: improper Excel format or worksheet names.\nThe program only works with the template provided."
+            return [{"ERROR", "Improper Excel format or worksheet names."}]
         for rowNum in range(2, self.tenuot_sheet.max_row+1): #start at 2 to exclude the header row
             tenua = {}
             row = str(rowNum)
@@ -98,7 +108,6 @@ class DataPrepper:
             self.positions["payment_timeframe_end"]["row"] = row
             self.validateTenuaData(tenua)
             self.tenuotData.append(tenua)
-        print(self.tenuotData)
         return self.tenuotData
 
     def getErrorList(self):
