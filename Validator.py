@@ -9,7 +9,7 @@ class Validator:
     def lessThanCharacterLimit_validate(self, data, position, character_limit, silent=False):
         if not len(str(data)) <= character_limit:
             if not silent:
-                self.errorList += [f"Data entered in worksheet {position['worksheet']}, cell {position['col'] + position['row']} exceeds the character limit of {character_limit}.\n"]
+                self.errorList += [f"Data in worksheet {position['worksheet']}, cell {position['col'] + position['row']} exceeds the character limit of {character_limit}.\n"]
             return False
         return True
 
@@ -39,18 +39,27 @@ class Validator:
             return False
         return True
 
-    def isProperDataType_validate(self, data, position, data_type): #data_type can just be a type or it can be a tuple of types
-        if isinstance(data_type, tuple):
+    def isProperDataType_validate(self, data, position, data_type, turnInto = None): #data_type can just be a type or it can be a tuple of types, turnInto means it should be able to be turned into that type
+        if isinstance(data_type, tuple): #if there is a tuple of allowed data types
             isAllowedType = False
-            for t in data_type:
+            for t in data_type: #check if the current data type is in that tuple of allowed ones
                 if isinstance(data, t): isAllowedType = True
             if isAllowedType == False:
                 self.errorList += [
-                    f"Data in worksheet {position['worksheet']}, cell {position['col'] + position['row']} must be of one of the following types: {data_type}. (int = integer, float = decimal number, str = text)\n"]
+                    f"Data in worksheet {position['worksheet']}, cell {position['col'] + position['row']} must be of one of the following types: {data_type}. (int = integer, float = decimal number, str = words or numbers in text format)\n"]
                 return False
-        else:
+        else: #if it's just a single data type I'm checking for (not a tuple of types)
             if not isinstance(data, data_type):
-                self.errorList += [f"Data in worksheet {position['worksheet']}, cell {position['col'] + position['row']} must be of type {data_type}. (int = integer, float = decimal number, str = text)\n"]
+                self.errorList += [f"Data in worksheet {position['worksheet']}, cell {position['col'] + position['row']} must be of type {data_type}. (int = integer, float = decimal number, str = words or numbers in text format)\n"]
+                return False
+        if turnInto != None:
+            #whatever turnInto equals, try to turn the data into that type.
+            try:
+                if turnInto == int: int(data)
+                elif turnInto == float: float(data)
+                elif turnInto == str: str(data)
+            except:
+                self.errorList += [f"Data in worksheet {position['worksheet']}, cell {position['col'] + position['row']} must be able to be converted into a/an {turnInto}. (int = integer, float = decimal number, str = text)\n"]
                 return False
         return True
 

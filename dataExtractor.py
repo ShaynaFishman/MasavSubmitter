@@ -61,12 +61,23 @@ class DataPrepper:
         return self.koteretData
 
     def validateTenuaData(self, tenua):
-        self.v.isProperDataType_validate(tenua["bank_code"], self.positions["bank_code"], int)
+        self.v.isProperDataType_validate(tenua["bank_code"], self.positions["bank_code"], (int,str), turnInto=int)
+        # #if it's less than the character limit, but not the exact right amount, add 0s automatically
+        # if self.v.lessThanCharacterLimit_validate(tenua["bank_code"], self.positions["bank_code"], 2,
+        #                                           silent=True) and not self.v.exactLength_validate(tenua["bank_code"],
+        #                                                                                            2, self.positions[
+        #                                                                                                "bank_code"],
+        #                                                                                            silent=True):
+        #     tenua["bank_code"] = "0" * (2 - len(str(tenua["bank_code"]))) + str(tenua["bank_code"])
+        # else:
+        self.v.lessThanCharacterLimit_validate(tenua["bank_code"], self.positions["bank_code"], 2)
         self.v.exactLength_validate(tenua["bank_code"], 2, self.positions["bank_code"])
-        self.v.isProperDataType_validate(tenua["branch_no"], self.positions["branch_no"], int)
-        if self.v.lessThanCharacterLimit_validate(tenua["branch_no"], self.positions["branch_no"], 3, silent=True) and not self.v.exactLength_validate(tenua["branch_no"], 3, self.positions["branch_no"], silent=True):
-            tenua["branch_no"] = "0" * (3 - len(str(tenua["branch_no"]))) + str(tenua["branch_no"])
-        self.v.isProperDataType_validate(tenua["bank_account_no"], self.positions["bank_account_no"], int)
+        self.v.isProperDataType_validate(tenua["branch_no"], self.positions["branch_no"], (int,str), turnInto=int)
+        # if self.v.lessThanCharacterLimit_validate(tenua["branch_no"], self.positions["branch_no"], 3, silent=True) and not self.v.exactLength_validate(tenua["branch_no"], 3, self.positions["branch_no"], silent=True):
+        #     tenua["branch_no"] = "0" * (3 - len(str(tenua["branch_no"]))) + str(tenua["branch_no"])
+        # else:
+        self.v.lessThanCharacterLimit_validate(tenua["branch_no"], self.positions["branch_no"], 3)
+        self.v.isProperDataType_validate(tenua["bank_account_no"], self.positions["bank_account_no"], (int,str), turnInto = int)
         self.v.lessThanCharacterLimit_validate(tenua["bank_account_no"], self.positions["bank_account_no"], 9)
         self.v.isProperDataType_validate(tenua["payee_tz"], self.positions["payee_tz"], (int, type(None)))
         self.v.lessThanCharacterLimit_validate(tenua["payee_tz"], self.positions["payee_tz"], 9)
