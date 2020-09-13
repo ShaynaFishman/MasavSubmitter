@@ -13,7 +13,7 @@ if __name__ == '__main__':
         for item in errorList:
             print(item)
     #else:
-    writerObj = TxtCreator(resultFile, koteretData, tenuotData)
+    writerObj = TxtCreator(koteretData, tenuotData)
     resultFile.write(writerObj.ReshumatKoteret_Creator())
     resultFile.write(writerObj.ReshumatTenua_Creator())
     resultFile.write(writerObj.ReshumatTotal_Creator())

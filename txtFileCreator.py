@@ -1,8 +1,7 @@
 from decimal import *
 class TxtCreator:
 
-    def __init__(self, input_spreadsheet, koteretData, tenuotData):
-        self.resultFile = input_spreadsheet
+    def __init__(self, koteretData, tenuotData):
         self.koteretData = koteretData
         self.tenuotData = tenuotData
         self.tenuotCount = 1

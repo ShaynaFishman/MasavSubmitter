@@ -50,7 +50,7 @@ class DataPrepper:
 
     def extractAndValidateKoteretData(self):
         if self.workbookIssue:
-            self.v.errorList += "FATAL ERROR: improper Excel format or worksheet names.\nThe program only works with the template provided."
+            self.v.errorList += ["FATAL ERROR: improper Excel format or worksheet names.\nThe program only works with the template provided."]
             return {"ERROR", "Improper Excel format or worksheet names."}
         self.koteretData["mosad_sholeach"] = self.koteret_sheet['A2'].value
         self.koteretData["kod_mosad"] = self.koteret_sheet['B2'].value
@@ -94,7 +94,7 @@ class DataPrepper:
 
     def extractAndValidateTenuotData(self):
         if self.workbookIssue:
-            self.v.errorList += "FATAL ERROR: improper Excel format or worksheet names.\nThe program only works with the template provided."
+            self.v.errorList += ["FATAL ERROR: improper Excel format or worksheet names.\nThe program only works with the template provided."]
             return [{"ERROR", "Improper Excel format or worksheet names."}]
         for rowNum in range(2, self.tenuot_sheet.max_row+1): #start at 2 to exclude the header row
             tenua = {}
