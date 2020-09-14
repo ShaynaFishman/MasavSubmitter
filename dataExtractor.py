@@ -37,6 +37,12 @@ class DataPrepper:
             return date.strftime("%y%m%d")
         else: return
 
+    def spaceStripper(self, dataDict):
+        for key, data in dataDict.items():
+            if isinstance(data, str):
+                dataDict[key] = data.strip()
+        return dataDict
+
     def validateKoteretData(self):
         self.v.isProperDataType_validate(self.koteretData["mosad_sholeach"], self.positions["mosad_sholeach"], int)
         self.v.lessThanCharacterLimit_validate(self.koteretData["mosad_sholeach"],
@@ -57,6 +63,7 @@ class DataPrepper:
         self.koteretData["shem_mosad"] = self.koteret_sheet['C2'].value
         self.koteretData["payment_date"] = self.dateFormatConverter(self.koteret_sheet['D2'].value)
         self.koteretData["creation_date"] = self.dateFormatConverter(self.koteret_sheet['E2'].value)
+        self.spaceStripper(self.koteretData) #is this better b/c more extensible?  But worse BIG O (not huge amount of data though)
         self.validateKoteretData()
         return self.koteretData
 
@@ -117,6 +124,7 @@ class DataPrepper:
             self.positions["payment_timeframe_begin"]["row"] = row
             tenua["payment_timeframe_end"] = self.dateFormatConverter(self.tenuot_sheet['I' + row].value)
             self.positions["payment_timeframe_end"]["row"] = row
+            self.spaceStripper(tenua)
             self.validateTenuaData(tenua)
             self.tenuotData.append(tenua)
         return self.tenuotData
