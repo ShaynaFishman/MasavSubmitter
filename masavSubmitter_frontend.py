@@ -36,7 +36,7 @@ def home():
 				return redirect(request.url)
 			else:
 				#send output file to the page
-				return send_file('./output_files/upload_file.txt', as_attachment=True)
+				return send_file('upload_file.txt', as_attachment=True)
 		flash('Incorrect file type. Only .xlsx files allowed. Please try again.')
 		return redirect(request.url)
 	else:
@@ -44,7 +44,7 @@ def home():
 		
 
 def processInputFile(file):
-	resultFile = io.open(os.path.join(app.config['DOWNLOAD_FOLDER'], 'upload_file.txt'), 'w+')
+	resultFile = io.open('upload_file.txt', 'w+')
 	dataObj = DataPrepper(file)
 	koteretData = dataObj.extractAndValidateKoteretData()
 	tenuotData = dataObj.extractAndValidateTenuotData()
